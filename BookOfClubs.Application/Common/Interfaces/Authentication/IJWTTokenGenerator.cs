@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookOfClubs.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace BookOfClubs.Application.Common.Interfaces.Authentication
 {
     public interface IJWTTokenGenerator
     {
-        string GenerateJWTToken(Guid userId, string firstName, string lastName);
+        string GenerateJWTToken(User user);
     }
 }

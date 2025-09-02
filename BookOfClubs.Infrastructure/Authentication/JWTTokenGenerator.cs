@@ -1,5 +1,6 @@
 ﻿using BookOfClubs.Application.Common.Interfaces.Authentication;
 using BookOfClubs.Application.Common.Interfaces.Services;
+using BookOfClubs.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +21,7 @@ namespace BookOfClubs.Infrastructure.Authentication
             _jwtSettings = jwtOptions.Value;
         }
 
-        public string GenerateJWTToken(Guid userId, string firstName, string lastName)
+        public string GenerateJWTToken(User user)
         {
            
             var signingCredentials = new SigningCredentials(
@@ -32,9 +33,9 @@ namespace BookOfClubs.Infrastructure.Authentication
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.GivenName, firstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName, lastName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
