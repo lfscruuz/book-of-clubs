@@ -1,6 +1,8 @@
 ﻿using BookOfClubs.Application.Common.Interfaces.Authentication;
 using BookOfClubs.Application.Common.Interfaces.Persistance;
+using BookOfClubs.Domain.Common.Errors;
 using BookOfClubs.Domain.Entities;
+using ErrorOr;
 
 namespace BookOfClubs.Application.Services.Authentication
 {
@@ -14,11 +16,11 @@ namespace BookOfClubs.Application.Services.Authentication
             _jwtTokenGenerator = jwtTokenGenerator;
             _userRepository = userRepository;
         }
-        public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+        public ErrorOr<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
         {
             if(_userRepository.GetUserByEmail(email) is not null)
             {
-                throw new Exception("Email already registered.");
+                return Errors.User.DuplicateEmail;
             }
             var user = new User
             {
@@ -36,12 +38,12 @@ namespace BookOfClubs.Application.Services.Authentication
                 token
             );
         }
-        public AuthenticationResult Login(string email, string password)
+        public ErrorOr<AuthenticationResult> Login(string email, string password)
         {
             var user = _userRepository.GetUserByEmail(email);
-            if (user is not User || user.Password != password)
+            if (user is null || user.Password != password)
             {
-                throw new Exception("Email or password is incorrect");
+                return Errors.User.FailedLogin;
             }
             var token = _jwtTokenGenerator.GenerateJWTToken(user);
 
