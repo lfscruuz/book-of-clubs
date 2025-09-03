@@ -17,4 +17,8 @@
     <ProjectReference Include="..\BookOfClubs.Infrastructure\BookOfClubs.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Errors\" />
+  </ItemGroup>
+
 </Project>
